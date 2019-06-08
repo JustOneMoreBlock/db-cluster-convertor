@@ -1,5 +1,7 @@
 # whmcs-cluster-convertor
-Convert your production WHMCS database to use InnoDB and have PRIMARY KEYS
+Convert your production WHMCS database to use InnoDB and have PRIMARY KEYS for sole purpose of master-replication.
+
+YES, I could easily `DEFINE` things manually, however with changes to WHMCS, Addons the ideal goal is to complete a backwards compatiable all-one-convertor that wouldn't require too many updates.
 
 
 The Concept:
