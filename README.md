@@ -9,10 +9,8 @@ The Concept:
 - The defined `COLUMN_NAME` variable will be used in a `ALTER` CONCAT.
 
 Eventually will be a PHP or one SQL query based script.
-(PHP) Could run checks.
-
-(SQL) Easier if you don't want to run a PHP file.
-
+- (PHP) Could run checks.
+- (SQL) Easier if you don't want to run a PHP file.
 
 Select and change MyISAM to InnoDB
 ```
