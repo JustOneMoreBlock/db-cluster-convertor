@@ -1,7 +1,16 @@
 # whmcs-cluster-convertor
 Convert your production WHMCS database to use InnoDB and have PRIMARY KEYS
 
-Eventually will be a PHP Script
+
+The Concept:
+- We can easily get a list of of all tables without a `PRIMARY KEY`. Using this will create a varible `LOST_KEYS`.
+- Then we can use `LOST_KEYS` table(s) to add a `virtual_pk`. However, MySQL only allows us to `ALTER` the `LOST_KEYS` table when adding a `COLUMN` but AFTER a specified `COLUMN_NAME`
+- Automatically get the first or last `COLUMN_NAME` this will create a variable to be defined.
+- The defined `COLUMN_NAME` variable will be used in a `ALTER` CONCAT.
+
+Eventually will be a PHP or one SQL query based script.
+(PHP) Could run checks.
+(SQL) Easier if you don't want to run a PHP file.
 
 Select and change MyISAM to InnoDB
 ```
