@@ -7,8 +7,8 @@ YES, I could easily `DEFINE` things manually, however with changes to WHMCS, Add
 The Concept:
 - We can easily get a list of of all tables without a `PRIMARY KEY`. Using this will create a varible `LOST_KEYS`.
 - Then we can use `LOST_KEYS` table(s) to add a `virtual_pk`. However, MySQL only allows us to `ALTER` the `LOST_KEYS` table when adding a `COLUMN` but AFTER a specified `COLUMN_NAME`
-- Automatically get the first or last `COLUMN_NAME` this will create a variable to be defined.
-- The defined `COLUMN_NAME` variable will be used in a `ALTER` CONCAT.
+- Automatically get the first or last `COLUMN_NAME` this will create a variable `GET_COLUMN`.
+- The defined `GET_COLUMN` variable will be used in a `ALTER` CONCAT in conjuntion of `LOST_KEYS`.
 
 Eventually will be a PHP or one SQL query based script.
 - (PHP) Could run checks.
