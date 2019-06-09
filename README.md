@@ -58,8 +58,20 @@ ALTER TABLE `your_database`.`mod_invoicedata`
 UNTESTED: Looking to merge and automated adding virtual primary keys.
 ```
 SET @DATABASE_NAME = 'Your db';
-SET @NO_PRIMARY_KEYS = 'SOME FUNCTION TO GET ALL TABLES';
-
+SET @NO_PRIMARY_KEYS = SELECT tab.table_schema AS database_name,
+       tab.table_name
+FROM information_schema.tables tab
+LEFT JOIN information_schema.table_constraints tco
+          ON tab.table_schema = tco.table_schema
+          AND tab.table_name = tco.table_name
+          AND tco.constraint_type = 'PRIMARY KEY'
+WHERE tco.constraint_type IS NULL
+      AND tab.table_schema NOT IN('mysql', 'information_schema', 
+                                  'performance_schema', 'sys')
+      AND tab.table_type = 'BASE TABLE'
+ORDER BY tab.table_schema,
+         tab.table_name;
+         
 SET
     @column_name =(
     SELECT COLUMN_NAME
