@@ -55,7 +55,7 @@ ALTER TABLE `your_database`.`mod_invoicedata`
 ```
 
 
-UNTESTED: Looking to merge and automated adding virtual primary keys.
+IDEAL UNTESTED PROTOTYPE: Looking to merge and automated adding virtual primary keys.
 ```
 SET @DATABASE_NAME = 'Your db';
 SET @NO_PRIMARY_KEYS = SELECT tab.table_schema AS database_name,
@@ -81,7 +81,7 @@ WHERE
     table_schema = @DATABASE_NAME AND TABLE_NAME = @NO_PRIMARY_KEYS AND ordinal_position = 1
 );
 SET
-    @convert_virual_pk; = CONCAT(
+    @convert_virual_pk = CONCAT(
          'ALTER TABLE `@DATABASE_NAME`.`@NO_PRIMARY_KEYS`
           ADD COLUMN `virtual_pk` INT(11) NOT NULL AFTER `@column_name`, 
           ADD PRIMARY KEY (`virtual_pk`);
@@ -94,8 +94,30 @@ EXECUTE
     convert_virual_primary_keys;
 DEALLOCATE
     convert_virual_primary_keys;
+
+
+SET
+    @convert_tables = SELECT  CONCAT('ALTER TABLE `', table_name, '` ENGINE=InnoDB;') AS sql_statements
+FROM    information_schema.tables AS tb
+WHERE   table_schema = @DATABASE_NAME
+AND     `ENGINE` = 'MyISAM'
+AND     `TABLE_TYPE` = 'BASE TABLE'
+ORDER BY table_name DESC;
+    );
+PREPARE
+    convert_engine;
+FROM
+    @convert_tables;
+EXECUTE
+    convert_engine;
+DEALLOCATE
+    convert_engine;
 ```
-Source: https://stackoverflow.com/a/53316149/1926449
+Created by Cory Gillenkirk
+
+
+
+Original Source: https://stackoverflow.com/a/53316149/1926449
 
 
 Trying to get first or last column from a table.
