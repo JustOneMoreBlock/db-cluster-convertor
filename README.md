@@ -1,5 +1,5 @@
-# whmcs-cluster-convertor
-Convert your production WHMCS database to use InnoDB and have PRIMARY KEYS for sole purpose of master-replication.
+# db-cluster-convertor
+Convert your production database to use InnoDB and have PRIMARY KEYS for sole purpose of master-replication.
 
 YES, I could easily `DEFINE` things manually, however with changes to WHMCS, Addons the ideal goal is to complete a backwards compatiable all-one-convertor that wouldn't require too many updates.
 
@@ -57,27 +57,31 @@ ALTER TABLE `your_database`.`mod_invoicedata`
 
 UNTESTED: Looking to merge and automated adding virtual primary keys.
 ```
+SET @DATABASE_NAME = 'Your db';
+SET @NO_PRIMARY_KEYS = 'SOME FUNCTION TO GET ALL TABLES';
+
 SET
     @column_name =(
     SELECT COLUMN_NAME
 FROM
     information_schema.columns
 WHERE
-    table_schema = 'database_name' AND TABLE_NAME = 'table_name' AND ordinal_position = 56
+    table_schema = @DATABASE_NAME AND TABLE_NAME = @NO_PRIMARY_KEYS AND ordinal_position = 1
 );
 SET
-    @query = CONCAT(
-        'ALTER TABLE `table_name` ADD `new_column_name` int(5) AFTER ',
-        @column_name
+    @convert_virual_pk; = CONCAT(
+         'ALTER TABLE `@DATABASE_NAME`.`@NO_PRIMARY_KEYS`
+          ADD COLUMN `virtual_pk` INT(11) NOT NULL AFTER `@column_name`, 
+          ADD PRIMARY KEY (`virtual_pk`);
     );
 PREPARE
-    stmt
+    convert_virual_primary_keys;
 FROM
-    @query;
+    @convert_virual_pk;
 EXECUTE
-    stmt;
+    convert_virual_primary_keys;
 DEALLOCATE
-    stmt;
+    convert_virual_primary_keys;
 ```
 Source: https://stackoverflow.com/a/53316149/1926449
 
