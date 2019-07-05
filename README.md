@@ -32,7 +32,7 @@ SET
     @add_virtual_pk = CONCAT(
          'ALTER TABLE `@DATABASE_NAME`.`@NO_PRIMARY_KEYS`
           ADD COLUMN `virtual_pk` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
-    );
+    ');
 PREPARE
        virtual_pk;
 FROM
